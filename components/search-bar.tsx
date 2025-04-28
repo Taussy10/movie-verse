@@ -2,7 +2,17 @@ import { View, Text, Image, TextInput } from 'react-native'
 import {useState} from 'react'
 import { icons } from '~/constants/icons'
 
-const SearchBar = () => {
+interface propsType{
+  // optional
+  onPress?: () => void;
+  placeholder: string;
+}
+
+// If you are defining props externally  then define like this either by interface or type
+const SearchBar = ({onPress, placeholder}:propsType) => {
+
+  // If you want to define Inline interface then define in {object}
+// const SearchBar = ({onPress, placeholder}:{onPress:()=> void; placeholder: string}) => {
     const [inputValue, setInputValue] = useState("")
   return (
     <View className='flex-row items-center  bg-secondary  rounded-full
@@ -17,12 +27,13 @@ const SearchBar = () => {
  tintColor= "#ab8bff"
         />
         <TextInput 
-        placeholder='Search through 300+ movies online'
+        placeholder= {placeholder}
          placeholderTextColor="#a8b5db"
         className='  flex-1 ml-2  text-white  '
-        onPress={() => {}}
+        onPress={onPress}
         value={inputValue}
         onChangeText={(text) => setInputValue(text)}
+        
           
         />
         

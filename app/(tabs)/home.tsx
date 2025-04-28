@@ -4,8 +4,10 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 import { images } from '~/constants/images'
 import { icons } from '~/constants/icons'
 import SearchBar from '~/components/search-bar'
+import { useRouter } from 'expo-router'
 
 const Home = () => {
+  const router = useRouter();
   return (
     // <SafeAreaView
     // Sometimes you don't need this for whole screenpx-4
@@ -29,7 +31,13 @@ const Home = () => {
 
 
 <View className=' flex-1 mt-5 '>
-  <SearchBar />
+
+  <SearchBar 
+  onPress={()=> router.push("/search")}
+  placeholder={'Search through 300+ movies online'}
+
+  />
+
 </View>
       </ScrollView>
       </View>
