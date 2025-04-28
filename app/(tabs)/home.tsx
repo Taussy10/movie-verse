@@ -6,6 +6,7 @@ import {
   ScrollView,
   ActivityIndicator,
   FlatList,
+  TouchableOpacity,
 } from 'react-native';
 import React from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -15,6 +16,7 @@ import SearchBar from '~/components/search-bar';
 import { useRouter } from 'expo-router';
 import { useFetch } from '~/hooks/useFetch';
 import { fetchMovies } from '~/components/services/api';
+import MovieCard from '~/components/MovieCard';
 
 const Home = () => {
   const router = useRouter();
@@ -59,15 +61,31 @@ const Home = () => {
             />
 
             <>
-              <Text className="  mb-3 mt-5 text-lg font-bold text-white">Latest Movies</Text>
+              <Text className="  mb-3 mt-5  text-xl font-bold text-white">Latest Movies</Text>
 
               <FlatList
                 data={movies}
-                horizontal
+                // horizontal
+                numColumns={2 }
+                keyExtractor={(item) =>item.id}
                 renderItem={({ item, index }) => {
                     return(
                     <View>
-                    <Text className=" text-sm text-white">{item.original_title}</Text>
+                      {/* <TouchableOpacity
+                      activeOpacity={0.6}
+                      className=' mb-6 mr-6' >
+                      */}
+                     <MovieCard 
+                    //  image = {item.poster_path}
+                    //  rating = {item?.vote_average}
+                    //  title = {item?.original_title}
+
+                    // Just speraded the object then get it one by one in
+                    //  MovieCard component 
+                     {...item}
+                     
+                     />
+                      {/* </TouchableOpacity> */}
                   </View>
                 )
                   }
