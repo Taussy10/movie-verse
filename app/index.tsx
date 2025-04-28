@@ -1,19 +1,17 @@
-import { Stack, Link } from 'expo-router';
+import { View, Text, Image } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { icons } from '~/constants/icons';
+import { images } from '~/constants/images';
 
-import { Button } from '~/components/Button';
-import { Container } from '~/components/Container';
-import { ScreenContent } from '~/components/ScreenContent';
-
-export default function Home() {
+const Index = () => {
   return (
-    <>
-      <Stack.Screen options={{ title: 'Home' }} />
-      <Container>
-        <ScreenContent path="app/index.tsx" title="Home" />
-        <Link href={{ pathname: '/details', params: { name: 'Dan' } }} asChild>
-          <Button title="Show Details" />
-        </Link>
-      </Container>
-    </>
+    <SafeAreaView
+    className=' flex-1 p-4'>
+      <Image source={images.bg} />
+      <Text
+      className='text-secondary text-3xl  '>Index</Text>
+    </SafeAreaView>
   );
-}
+};
+
+export default Index;
