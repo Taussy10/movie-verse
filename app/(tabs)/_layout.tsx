@@ -20,7 +20,7 @@ const TabIcon = ({ icon, title, focused }:TabIconTypes) => {
           className="  mt-4  min-h-16 w-full min-w-[100px] flex-1
                flex-row items-center justify-center overflow-hidden rounded-full
               ">
-          <Image source={icon} tinitColor="#151312" className=" size-5" />
+          <Image source={icon} tinitColor="#151312" className="size-5" />
           <Text className=" ml-2 text-base font-semibold text-secondary">{title}</Text>
         </ImageBackground>
       </View>
