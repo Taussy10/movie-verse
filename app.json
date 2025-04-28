@@ -3,7 +3,7 @@
     "name": "movie-verse",
     "slug": "movie-verse",
     "version": "1.0.0",
-
+     "newArchEnabled": true,
     "scheme": "movie-verse",
     "web": {
       "bundler": "metro",
