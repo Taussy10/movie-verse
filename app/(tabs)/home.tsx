@@ -8,7 +8,6 @@ import {
   FlatList,
   TouchableOpacity,
 } from 'react-native';
-import React from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { images } from '~/constants/images';
 import { icons } from '~/constants/icons';
@@ -17,19 +16,36 @@ import { useRouter } from 'expo-router';
 import { useFetch } from '~/hooks/useFetch';
 import { fetchMovies } from '~/components/services/api';
 import MovieCard from '~/components/MovieCard';
+import { useState } from 'react';
 
 const Home = () => {
   const router = useRouter();
+  // For textInput we need tow things
+  // 1.  storing value in text input
+  // 2. Function that shows that this key has pressed by giving a prams 
+  // then store that key(params) in inputText  
+
+  // value is toring
+  // problem is in key presssing
+  const [inputValue, setInputValue] = useState('');
   const {
     data: movies,
     loading: moviesLoading,
     error: moviesError,
-  } = useFetch(() => fetchMovies({ query: "" }));
+    // This query will take search props
+  } = useFetch(() => fetchMovies({ query: inputValue}));
 
+  const searchQuery = (text:string) =>{
+    setInputValue(text)
+  }
+  // What will be result ? movies
+  // what will be text that we will pass? inputValue
 
-  
+  // Kya hai ? ek params hai jisme input value daalna hai:
+  // sabse pehle search input se kuchh value nikalni hai
+  // then input value ko store krna hai then usko change
+
   // console.log('Movies :', movies);
-
 
   return (
     // <SafeAreaView
@@ -56,8 +72,13 @@ const Home = () => {
         ) : (
           <View className=" mt-5 flex-1 ">
             <SearchBar
-              onPress={() => router.push('/search')}
+              // onPress={() => router.push('/search')}
               placeholder={'Search through 300+ movies online'}
+              inputValue= {inputValue}
+              // setInputValue= {((text:string) =>setInputValue(text)) }
+              // setInputValue={(inputValue: string) => setInputValue(inputValue)}
+              // setInputValue={searchQuery}
+              onChangeText={searchQuery}
             />
 
             <>
@@ -66,30 +87,32 @@ const Home = () => {
               <FlatList
                 data={movies}
                 // horizontal
-                numColumns={2 }
-                keyExtractor={(item) =>item.id}
+                numColumns={2}
+                keyExtractor={(item) => item.id}
                 renderItem={({ item, index }) => {
-                    return(
-                    <View>
+                  return (
+                    // Why in percetage cause these absolute value deosn' follow blocks scope rules
+                    // if the text 1000 then it take whole screen horizontally so needed
+                    // so that it takes only 50% of screen
+
+                    <View className=" w-[50%]">
                       {/* <TouchableOpacity
                       activeOpacity={0.6}
                       className=' mb-6 mr-6' >
                       */}
-                     <MovieCard 
-                    //  image = {item.poster_path}
-                    //  rating = {item?.vote_average}
-                    //  title = {item?.original_title}
+                      <MovieCard
+                        //  image = {item.poster_path}
+                        //  rating = {item?.vote_average}
+                        //  title = {item?.original_title}
 
-                    // Just speraded the object then get it one by one in
-                    //  MovieCard component 
-                     {...item}
-                     
-                     />
+                        // Just speraded the object then get it one by one in
+                        //  MovieCard component
+                        {...item}
+                      />
                       {/* </TouchableOpacity> */}
-                  </View>
-                )
-                  }
-                 }
+                    </View>
+                  );
+                }}
               />
             </>
           </View>
