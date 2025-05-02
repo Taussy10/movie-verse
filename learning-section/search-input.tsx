@@ -29,10 +29,10 @@ const SearchInput = () => {
     // Learn more here: https://www.notion.so/Movie-verse-1e31cd817c2380ddb28bd1283d0561cf?pvs=4#1e71cd817c238030af7efbcb638cf93a
 
     const filteredData = data.filter((item) =>
-    (
       item.name.toLowerCase().includes(query.toLowerCase())
-    )
     );
+
+    console.log('FilteredData :', filteredData);
   }
 
   return (

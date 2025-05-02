@@ -1,4 +1,12 @@
-import { View, Text, Image, ImageBackground, StatusBar, FlatList, ActivityIndicator } from 'react-native';
+import {
+  View,
+  Text,
+  Image,
+  ImageBackground,
+  StatusBar,
+  FlatList,
+  ActivityIndicator,
+} from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { icons } from '~/constants/icons';
 import { images } from '~/constants/images';
@@ -20,13 +28,17 @@ const Search = () => {
   const searchQuery = (text: string) => {
     setInputValue(text);
   };
-  console.log('hello');
+  // The problem is that it only shows when component renders/update/delete 
+  // so in useEffect we need if something changes then fetch it 
+  // console.log('hello');
+// console.log("hello");
+console.log("hello");
 
   return (
     <SafeAreaView className=" flex-1  bg-primary">
       <StatusBar barStyle={'light-content'} />
-
-      <View className=" px-4">
+{/* px-4 */}
+      <View className=" ">
         <FlatList
           data={movies}
           numColumns={2}
@@ -38,19 +50,24 @@ const Search = () => {
               <View className="  items-center justify-center">
                 <Image source={icons.logo} className="mx-auto mb-5  mt-20 h-10 w-12" />
               </View>
-              <View className=" mb-5">
+              <View className=" mb-5 ">
                 <SearchBar
                   placeholder={'Search through 300+ movies online'}
                   inputValue={inputValue}
                   onChangeText={searchQuery}
                 />
               </View>
-                {moviesLoading ? (
-                        <ActivityIndicator color={'#0000ff'} size={'small'} className="  mt-5 self-center" />
-                      ) : moviesError && (
-                        <Text className=' text-red-500 my-3'>Error: {moviesError?.message} Failed</Text>
-                      ) }
-                      
+              {moviesLoading ? (
+                <ActivityIndicator
+                  color={'#0000ff'}
+                  size={'small'}
+                  className="mt-5 self-center"
+                />
+              ) : (
+                moviesError && (
+                  <Text className=" my-3 text-red-500">Error: {moviesError?.message} Failed</Text>
+                )
+              )}
             </>
           }
           renderItem={({ item, index }) => {
