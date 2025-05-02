@@ -72,7 +72,7 @@ const Home = () => {
         ) : (
           <View className=" mt-5 flex-1 ">
             <SearchBar
-              // onPress={() => router.push('/search')}
+              onPress={() => router.push('/search')}
               placeholder={'Search through 300+ movies online'}
               inputValue= {inputValue}
               // setInputValue= {((text:string) =>setInputValue(text)) }
