@@ -10,75 +10,119 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { icons } from '~/constants/icons';
 import { images } from '~/constants/images';
-import { useFetch } from '~/hooks/useFetch';
+import useFetch from '~/hooks/useFetch';
 import { fetchMovies } from '~/components/services/api';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import SearchBar from '~/components/search-bar';
 import MovieCard from '~/components/MovieCard';
-
+import { router } from 'expo-router';
+import {useDebouncedCallback} from "use-debounce"
 const Search = () => {
-  const [inputValue, setInputValue] = useState('');
+  const [searchQuery, setSearchQuery] = useState('');
   const {
     data: movies,
     loading: moviesLoading,
     error: moviesError,
+    refetch: loadMovies,
+    reset: resetMovies
     // This query will take search props
-  } = useFetch(() => fetchMovies({ query: inputValue }));
+  } = useFetch(() => fetchMovies({ query: searchQuery}), false);
 
-  const searchQuery = (text: string) => {
-    setInputValue(text);
+  // There is a problem in this that app 
+  // request to server for every single letter you type in filed 
+// useDebounce
+
+useEffect(() => {
+  // reftechMovies()
+  
+  const timeoutId = setTimeout( async() => {
+    if (searchQuery.trim()) {
+      await loadMovies()
+    }else{
+      resetMovies()
+    }
+  }, 1000)
+
+  return () => clearTimeout(timeoutId)
+ 
+}, [searchQuery])
+
+
+  const handleSearch = (text: string) => {
+    setSearchQuery(text);
   };
-  // The problem is that it only shows when component renders/update/delete 
-  // so in useEffect we need if something changes then fetch it 
-  // console.log('hello');
+  // The problem is that it only shows when component renders/update/delete
+  // so in useEffect we need if something changes then fetch it
 // console.log("hello");
-console.log("hello");
 
   return (
     <SafeAreaView className=" flex-1  bg-primary">
       <StatusBar barStyle={'light-content'} />
-{/* px-4 */}
-      <View className=" ">
-        <FlatList
-          data={movies}
-          numColumns={2}
-          keyExtractor={(item) => item.id.toString()}
-          ListHeaderComponent={
-            <>
-              <Image source={images.bg} className=" absolute z-0 w-full  flex-1 " />
 
-              <View className="  items-center justify-center">
-                <Image source={icons.logo} className="mx-auto mb-5  mt-20 h-10 w-12" />
-              </View>
-              <View className=" mb-5 ">
-                <SearchBar
-                  placeholder={'Search through 300+ movies online'}
-                  inputValue={inputValue}
-                  onChangeText={searchQuery}
-                />
-              </View>
-              {moviesLoading ? (
-                <ActivityIndicator
-                  color={'#0000ff'}
-                  size={'small'}
-                  className="mt-5 self-center"
-                />
-              ) : (
-                moviesError && (
-                  <Text className=" my-3 text-red-500">Error: {moviesError?.message} Failed</Text>
-                )
-              )}
-            </>
-          }
-          renderItem={({ item, index }) => {
-            return (
-              <View className=" w-[50%]">
-                <MovieCard {...item} />
-              </View>
-            );
-          }}
-        />
-      </View>
+      <Image source={images.bg} className=" absolute z-0 w-full flex-1" />
+
+      <FlatList
+        data={movies}
+        keyExtractor={(item) => item.id.toString()}
+        className=" px-5"
+        numColumns={2}
+        columnWrapperStyle={{
+          justifyContent: 'center',
+          gap: 16,
+          marginVertical: 16,
+        }}
+        contentContainerStyle={{
+          paddingBottom: 100,
+        }}
+        ListHeaderComponent={
+          <>
+          <View className=" mt-20  w-full  flex-row  items-center justify-center">
+            <Image source={icons.logo} className=" size-12 mb-8" />
+          </View>
+
+          <View>
+          <SearchBar
+              // onPress={() => router.push('/search')}
+              placeholder="Search movies"
+              inputValue={searchQuery}
+              onChangeText={handleSearch}
+            />
+
+            {/* If loading then also show indicator */}
+            {
+              moviesLoading && <ActivityIndicator 
+              color={"#0000ff"}
+              size={"large"} 
+              className='my-3'
+              />
+            }
+
+            {/* If error then also show Error */}
+            {moviesError && (
+              <Text className=' text-red-500 px-5 my-3'>Error: {moviesError.message} </Text>
+            )
+            }
+
+
+            {/* If not loading also not error then also Movies */}
+            { !moviesLoading && !moviesError && "SEARCH TERM".trim() && movies?.length >0 && (
+              // {" "} for space
+              <Text  className=' text-white  font-bold  text-xl '>Search results for {" "}
+              <Text  className='  text-darkAccent'>{searchQuery}</Text></Text>
+            )
+            } 
+   
+          </View>
+          </>
+        }
+        renderItem={({ item }) => {
+          return (
+            <View className=" w-[50%]">
+              <MovieCard {...item} />
+            </View>
+          );
+        }}
+      />
     </SafeAreaView>
   );
 };

@@ -37,7 +37,7 @@ const RootLayout = () => {
       }}>
       <Stack.Screen name="index" />
       <Stack.Screen name="onboarding" />
-      <Stack.Screen name="movie/[id]" />
+      <Stack.Screen name="movies/[id]" />
       <Stack.Screen name="(tabs)" />
     </Stack>
   );

@@ -1,6 +1,11 @@
+// if you have a lot of things to get create config varialbe
+// and store here for writing code in good manner
 
 export const TMDB_CONFIG = {
-  BASE_URL: 'https://api.themoviedb.org/3/',
+  // Take care of that forward slash at the end
+  // so that you don't write like this /3//popular_movies 
+  // or /3popular_movies
+  BASE_URL: 'https://api.themoviedb.org/3',
   API_KEY: process.env.EXPO_PUBLIC_TMDB_API_KEY,
   headers: {
     accept: 'application/json',
@@ -8,28 +13,25 @@ export const TMDB_CONFIG = {
   },
 };
 
-// You may ask we didn't use API key ? cause we don't need
-// that was for registering on TMDB
-
-// Created a functiont that takes params called query 
+// Created a functiont that takes params called query
 export const fetchMovies = async ({ query }: { query: string }) => {
   try {
     // whenever you get an string and if you want to use temeplate literal
     // encode them cause theere may be error
 
-    // Created a varaiable to store endpoint for fetching: either searched movies 
-    // if query exist else store popular moves in endpoint 
+    // Created a varaiable to store endpoint for fetching: either searched movies
+    // if query exist else store popular moves in endpoint
 
-    const endpoint =query ?
-     `${TMDB_CONFIG.BASE_URL}/search/movie?query=${encodeURIComponent(query)}`
-      : `${TMDB_CONFIG.BASE_URL}discover/movie?sort_by=popularity.desc`;
+    const endpoint = query
+      ? `${TMDB_CONFIG.BASE_URL}/search/movie?query=${encodeURIComponent(query)}`
+      : `${TMDB_CONFIG.BASE_URL}/discover/movie?sort_by=popularity.desc`;
 
-      // Then fetch according to endpoint 
+    // Then fetch according to endpoint
     const response = await fetch(endpoint, {
       method: 'GET',
       headers: TMDB_CONFIG.headers,
     });
-// console.log("Response ",response);
+    // console.log("Response ",response);
 
     if (!response.ok) {
       console.log('Response :', response);
@@ -37,14 +39,14 @@ export const fetchMovies = async ({ query }: { query: string }) => {
     }
 
     // if everything ok:
-    // In response provieds this kinda ununderstable data 
-    //  {"_bodyBlob":28}}, "_bodyInit": {"_data": {"__collector": [Object], "blobId": 
-    // so convert it in json and give it Return data as promise 
+    // In response provieds this kinda ununderstable data
+    //  {"_bodyBlob":28}}, "_bodyInit": {"_data": {"__collector": [Object], "blobId":
+    // so convert it in json and give it Return data as promise
 
     const data = await response.json();
-    console.log("movieData :",data);
-        
-    return data.results
+    console.log('movieData :', data);
+
+    return data.results;
   } catch (error) {
     console.log('Error from fetchMovies fun in api.ts :', error);
     throw new Error('Error in fetching movies');
