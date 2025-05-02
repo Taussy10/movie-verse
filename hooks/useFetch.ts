@@ -10,7 +10,13 @@ import { fetchMovies } from '~/components/services/api';
 // It takes 2 params 
 // 1. fetchFunction params takes a call back function jo ki
 //  promise return krega:
-// 2. autFetch params default value true for refetching again data if component rendrs/updata/remove
+
+// 2. autFetch params by default value will be true so that it can refetch 
+// again and again automatically 
+
+// then in search screen pass autoFetch params value = false so that it 
+// can't refetch automatically then create useEffect and refetch the component
+
 const useFetch = <T>(fetchFunction: () => Promise<T>, autoFetch = true) => {
   // For working with fetching data we need to do three things
 

@@ -16,7 +16,6 @@ import { useState, useEffect } from 'react';
 import SearchBar from '~/components/search-bar';
 import MovieCard from '~/components/MovieCard';
 import { router } from 'expo-router';
-import {useDebouncedCallback} from "use-debounce"
 const Search = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const {
@@ -24,36 +23,37 @@ const Search = () => {
     loading: moviesLoading,
     error: moviesError,
     refetch: loadMovies,
-    reset: resetMovies
+    reset: resetMovies,
     // This query will take search props
-  } = useFetch(() => fetchMovies({ query: searchQuery}), false);
+  } = useFetch(() => fetchMovies({ query: searchQuery }), false);
 
-  // There is a problem in this that app 
-  // request to server for every single letter you type in filed 
-// useDebounce
+  // There is a problem in this that app
+  // It's requesting to server for every single
+  // letter you type in filed
 
-useEffect(() => {
-  // reftechMovies()
-  
-  const timeoutId = setTimeout( async() => {
-    if (searchQuery.trim()) {
-      await loadMovies()
-    }else{
-      resetMovies()
-    }
-  }, 1000)
+  // solution ? use deboucne technique in
+  // which after typing then 1 second it should request to server
+  // https://www.youtube.com/watch?v=AkHvKi2s9hw
+  // This is called debouncing search term
 
-  return () => clearTimeout(timeoutId)
- 
-}, [searchQuery])
+  useEffect(() => {
+    const timeoutId = setTimeout(async () => {
+      if (searchQuery.trim()) {
+        await loadMovies();
+      } else {
+        resetMovies();
+      }
+    }, 500);
 
+    return () => clearTimeout(timeoutId);
+  }, [searchQuery]);
 
   const handleSearch = (text: string) => {
     setSearchQuery(text);
   };
   // The problem is that it only shows when component renders/update/delete
   // so in useEffect we need if something changes then fetch it
-// console.log("hello");
+  // console.log("hello");
 
   return (
     <SafeAreaView className=" flex-1  bg-primary">
@@ -76,44 +76,49 @@ useEffect(() => {
         }}
         ListHeaderComponent={
           <>
-          <View className=" mt-20  w-full  flex-row  items-center justify-center">
-            <Image source={icons.logo} className=" size-12 mb-8" />
-          </View>
+            <View className=" mt-20  w-full  flex-row  items-center justify-center">
+              <Image source={icons.logo} className=" mb-8 size-12" />
+            </View>
 
-          <View>
-          <SearchBar
-              // onPress={() => router.push('/search')}
-              placeholder="Search movies"
-              inputValue={searchQuery}
-              onChangeText={handleSearch}
-            />
-
-            {/* If loading then also show indicator */}
-            {
-              moviesLoading && <ActivityIndicator 
-              color={"#0000ff"}
-              size={"large"} 
-              className='my-3'
+            <View>
+              <SearchBar
+                // onPress={() => router.push('/search')}
+                placeholder="Search movies"
+                inputValue={searchQuery}
+                onChangeText={handleSearch}
               />
-            }
 
-            {/* If error then also show Error */}
-            {moviesError && (
-              <Text className=' text-red-500 px-5 my-3'>Error: {moviesError.message} </Text>
-            )
-            }
+              {/* If loading then also show indicator */}
+              {moviesLoading && (
+                <ActivityIndicator color={'#0000ff'} size={'large'} className="my-3" />
+              )}
 
+              {/* If error then also show Error */}
+              {moviesError && (
+                <Text className=" my-3 px-5 text-red-500">Error: {moviesError.message} </Text>
+              )}
 
-            {/* If not loading also not error then also Movies */}
-            { !moviesLoading && !moviesError && "SEARCH TERM".trim() && movies?.length >0 && (
-              // {" "} for space
-              <Text  className=' text-white  font-bold  text-xl '>Search results for {" "}
-              <Text  className='  text-darkAccent'>{searchQuery}</Text></Text>
-            )
-            } 
-   
-          </View>
+              {/* If not loading also not error then also Movies */}
+              {!moviesLoading && !moviesError && 'SEARCH TERM'.trim() && movies?.length > 0 && (
+                // {" "} for space
+                <Text className=" text-xl  font-bold  text-white ">
+                  Search results for <Text className="  text-darkAccent">{searchQuery}</Text>
+                </Text>
+              )}
+            </View>
           </>
+        }
+        ListEmptyComponent={
+          !moviesLoading && !moviesError ? (
+            <View className=" my-6 px-6 ">
+              {
+                <Text className=" text-center font-bold text-2xl  text-gray-500 ">
+                  {/* // If search trim exist then show no movies found else search for movies  */}
+                  {searchQuery.trim() ? 'No Movies Found' : 'Search for movies'}
+                </Text>
+              }
+            </View>
+          ) : null
         }
         renderItem={({ item }) => {
           return (
