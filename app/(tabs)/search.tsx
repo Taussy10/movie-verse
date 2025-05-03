@@ -16,6 +16,7 @@ import { useState, useEffect } from 'react';
 import SearchBar from '~/components/search-bar';
 import MovieCard from '~/components/MovieCard';
 import { router } from 'expo-router';
+import { updateSearchCount } from '~/appwrite/appwrite';
 const Search = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const {
@@ -37,6 +38,7 @@ const Search = () => {
   // This is called debouncing search term
 
   useEffect(() => {
+    updateSearchCount(searchQuery,movies[0])
     const timeoutId = setTimeout(async () => {
       if (searchQuery.trim()) {
         await loadMovies();

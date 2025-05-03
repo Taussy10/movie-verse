@@ -17,7 +17,7 @@ import { useRouter } from 'expo-router';
 import useFetch from '~/hooks/useFetch';
 import { fetchMovies } from '~/components/services/api';
 import MovieCard from '~/components/MovieCard';
-import { useState } from 'react';
+import { useState ,} from 'react';
 
 const Home = () => {
   const router = useRouter();

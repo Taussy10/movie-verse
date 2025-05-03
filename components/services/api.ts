@@ -39,10 +39,24 @@ export const fetchMovies = async ({ query }: { query: string }) => {
     }
 
     // if everything ok:
-    // In response provieds this kinda ununderstable data
-    //  {"_bodyBlob":28}}, "_bodyInit": {"_data": {"__collector": [Object], "blobId":
-    // so convert it in json and give it Return data as promise
 
+
+    // 
+    // Then from server we get response object 
+    // but data in BLOB(Binary large object) format an unreadable stream 
+
+    //   basically binaray that's not unreadable for human being 
+
+    //  {"_bodyBlob":28}}, "_bodyInit": {"_data": {"__collector": [Object], "blobId":
+
+    // So we need to convert in readable format and return data in object 
+    // by response.json() also it returns promise 
+    // 
+    // So does three things 
+    // 1. Read the Blob format 
+    // 2. convert in js object 
+    // 3. return promise 
+    
     const data = await response.json();
     console.log('movieData :', data);
 
