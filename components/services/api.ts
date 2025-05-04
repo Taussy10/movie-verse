@@ -53,9 +53,12 @@ export const fetchMovies = async ({ query }: { query: string }) => {
     // by response.json() also it returns promise 
     // 
     // So does three things 
-    // 1. Read the Blob format 
+    // 1. convert to readable format  
     // 2. convert in js object 
     // 3. return promise 
+    // Now cause it returns promise so for resolving it have two methods 
+    // 1. then catch 
+    // 2. async await + try catch
     
     const data = await response.json();
     console.log('movieData :', data);
