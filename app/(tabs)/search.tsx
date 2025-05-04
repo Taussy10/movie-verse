@@ -26,7 +26,7 @@ const Search = () => {
     refetch: loadMovies,
     reset: resetMovies,
     // This query will take search props
-  } = useFetch(() => fetchMovies({ query: searchQuery || " " }), false);
+  } = useFetch(() => fetchMovies({ query: searchQuery || "" }), false);
 
   // There is a problem in this that app
   // It's requesting to server for every single
@@ -39,18 +39,24 @@ const Search = () => {
 
   // Take care of this show can't convert null value
   // Can't convert null to object or something 
-  // useEffect(() => {
-  //   updateSearchCount(searchQuery,movies[0])
-  //   const timeoutId = setTimeout(async () => {
-  //     if (searchQuery.trim()) {
-  //       await loadMovies();
-  //     } else {
-  //       resetMovies();
-  //     }
-  //   }, 500);
+  useEffect(() => {
+    // We want that movie should exist 
+    // if it's null will give updateSearchCount(searchQuery,movies[0]) error
 
-  //   return () => clearTimeout(timeoutId);
-  // }, [searchQuery]);
+    // if (movies) {
+    //   updateSearchCount(searchQuery,movies[0])
+    // }
+   
+    const timeoutId = setTimeout(async () => {
+      if (searchQuery.trim()) {
+        await loadMovies();
+      } else {
+        resetMovies();
+      }
+    }, 500);
+
+    return () => clearTimeout(timeoutId);
+  }, [searchQuery]);
 
   const handleSearch = (text: string) => {
     setSearchQuery(text);

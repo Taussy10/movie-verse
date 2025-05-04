@@ -22,6 +22,8 @@ client.setEndpoint(config.endpoint).setProject(config.projectId).setPlatform(con
 
 export const updateSearchCount = async (query:string, movie: Movie) => {
     // We need to check whether that movie text exist or not
+    //  according to query we typed on filed
+
     // if exist ? then increase the count
     const result = await databases.listDocuments(
         config.databaseId, 
@@ -30,8 +32,20 @@ export const updateSearchCount = async (query:string, movie: Movie) => {
     );
     console.log("Result :",result);
     
+    // If not exist then create a new document
     if (!result) {
-        
+        const hello = await databases.createDocument(
+          config.databaseId,
+          config.collectionId,
+          ID.unique(),
+          {
+            "searchTerm":query,
+            // "count": 
+            "poster_url": "h",
+            "title": "hello",
+            "movie_id": movie
+          }
+        )
     }
   // if not ? then create a new document and store the movie name id
   const updateMovies = await databases.updateDocument(
