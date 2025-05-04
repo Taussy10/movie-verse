@@ -1,4 +1,4 @@
-import { FlatList, Image, StyleSheet, Text, View } from 'react-native';
+import { FlatList, Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import {useState, useEffect} from 'react';
 import { Link, router, useLocalSearchParams } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -69,14 +69,14 @@ useEffect(() => {
           return `${hours}h ${minutes}m`;
         }
         return(
-       <View>
+       <View className=' pb-9'>
         <Image
         source={{
           uri: item?.poster_path
             ? `https://image.tmdb.org/t/p/w500${item?.poster_path}`
             : 'https://imgs.search.brave.com/_Svg6-LpfcJeA2e4HQl40eXQb6pFpYAn8H2ueohz8oc/rs:fit:500:0:0:0/g:ce/aHR0cHM6Ly90NC5m/dGNkbi5uZXQvanBn/LzA2LzU3LzM3LzAx/LzM2MF9GXzY1NzM3/MDE1MF9wZE5lRzVw/akk5NzZaYXNWYktO/OVZxSDFyZm95a2RZ/VS5qcGc',
         }}
-        className="  h-96  w-full rounded-xl p-4"
+        className="  h-[400px]  w-full rounded-xl p-4"
         resizeMode="cover"
       />
 
@@ -118,6 +118,9 @@ useEffect(() => {
 </View>
 
 {/* For generes */}
+<ScrollView
+horizontal
+> 
 <View className=' flex-row '>
 {  
   item?.genres.map((item) => {
@@ -132,7 +135,7 @@ useEffect(() => {
   })
 }
 </View>
-
+</ScrollView>
 
 
 
@@ -155,18 +158,61 @@ useEffect(() => {
 
  
         {/* <Text className=' font-semibold text-white'>{item?.runtime/60}</Text> */}
-        <Text className=' font-semibold text-white'>${item?.production_countries[0].name}  </Text>
-        <Text className=' font-semibold text-white'>{item?.revenue}</Text>
-  
 
+  {/* Container for Tagline  */}
+  <View className=' mb-6'>
+  <Text className='  font-semibold text-text  mb-2 '>Tagline</Text>
+        <Text className=' font-semibold text-white'>{item?.tagline}.</Text>
+  </View>
+
+
+
+
+{/* Container for Production companies  */}
+<View className=' mb-6'>
+
+
+<Text className='  font-semibold text-text  mb-2 '>Production Companies</Text>
+<ScrollView
+horizontal
+>
+
+<View className=' flex-row '>
+{  
+  item?.production_companies.map((item) => {
+    console.log(item);
+    
+    return(
+      // this container for between the elements
+      <View   className=' p-2  mr-2  mb-3 rounded-lg bg-blue-600' >
+        <Text className=' font-semibold text-white'>{item.name}</Text>
+      </View>
+    )
+  })
+}
+</View>
+</ScrollView>
+</View>
+
+  <TouchableOpacity
+className=' bg-darkAccent p-4 rounded-xl  flex-row items-center justify-center'
+activeOpacity={0.8}
+onPress={() => router.push("/home")}
+>
+  <Text className=' text-base  font-bold '>Visit Homepage</Text>
+</TouchableOpacity>
+
+
+
+
+
+
+{/* End of detail componets */}
 </View>
         
 
 
-
-        {/* Texts show text string not boolean values */}
-        {/* <Text className=' text- text-white'>{item?.adult}</Text> */}
-        <Text className=' text- text-white'>{item?.budget}</Text>
+      
        </View>
         )
       }}
