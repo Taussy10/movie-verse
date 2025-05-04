@@ -26,7 +26,7 @@ const Search = () => {
     refetch: loadMovies,
     reset: resetMovies,
     // This query will take search props
-  } = useFetch(() => fetchMovies({ query: searchQuery }), false);
+  } = useFetch(() => fetchMovies({ query: searchQuery || " " }), false);
 
   // There is a problem in this that app
   // It's requesting to server for every single
@@ -37,18 +37,20 @@ const Search = () => {
   // https://www.youtube.com/watch?v=AkHvKi2s9hw
   // This is called debouncing search term
 
-  useEffect(() => {
-    updateSearchCount(searchQuery,movies[0])
-    const timeoutId = setTimeout(async () => {
-      if (searchQuery.trim()) {
-        await loadMovies();
-      } else {
-        resetMovies();
-      }
-    }, 500);
+  // Take care of this show can't convert null value
+  // Can't convert null to object or something 
+  // useEffect(() => {
+  //   updateSearchCount(searchQuery,movies[0])
+  //   const timeoutId = setTimeout(async () => {
+  //     if (searchQuery.trim()) {
+  //       await loadMovies();
+  //     } else {
+  //       resetMovies();
+  //     }
+  //   }, 500);
 
-    return () => clearTimeout(timeoutId);
-  }, [searchQuery]);
+  //   return () => clearTimeout(timeoutId);
+  // }, [searchQuery]);
 
   const handleSearch = (text: string) => {
     setSearchQuery(text);

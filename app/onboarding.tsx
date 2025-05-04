@@ -5,7 +5,7 @@ import { Link, Redirect, router } from 'expo-router'
 
 const Onboarding = () => {
    if (true) {
-      return <Redirect href={"/search"} />
+      return <Redirect href={"/home"} />
       
     }
   

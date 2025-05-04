@@ -17,7 +17,7 @@ import { fetchMovies } from '~/components/services/api';
 // then in search screen pass autoFetch params value = false so that it 
 // can't refetch automatically then create useEffect and refetch the component
 
-const useFetch = <T>(fetchFunction: () => Promise<T>, autoFetch = true) => {
+const useFetch = <T>(fetchFunction: () => Promise<T>, autoFetch = true, ) => {
   // For working with fetching data we need to do three things
 
   //1. Store the data
@@ -34,7 +34,7 @@ const useFetch = <T>(fetchFunction: () => Promise<T>, autoFetch = true) => {
       setError(null);
 
       const result = await fetchFunction();
-      // console.log("Result: ", result);
+      console.log("Result: ", result);
 
       // Then will store it
       setData(result);

@@ -53,9 +53,8 @@ export const fetchMovies = async ({ query }: { query: string }) => {
     // by response.json() also it returns promise 
     // 
     // So does three things 
-    // 1. convert to readable format  
-    // 2. convert in js object 
-    // 3. return promise 
+    // 1. convert to parsed JSON   
+    // 2. return promise 
     // Now cause it returns promise so for resolving it have two methods 
     // 1. then catch 
     // 2. async await + try catch
@@ -69,3 +68,20 @@ export const fetchMovies = async ({ query }: { query: string }) => {
     throw new Error('Error in fetching movies');
   }
 };
+
+export const fetchMovieDetails = async(id:number) => {
+// export const fetchMovieDetails = async() => {
+// const fetchMovieDetails = async() => {
+  try {
+    const promise = await fetch(`https://api.themoviedb.org/3/movie/${id}`, {
+    // const promise = await fetch(`https://api.themoviedb.org/3/movie/12`, {
+      method: "GET",
+      headers: TMDB_CONFIG.headers
+    })
+    const data = await promise.json()
+    console.log("movieDetails from api.ts :",data);
+    return data
+  } catch (error) {
+    console.log("error from fetchMovieDetaisl in api.ts :", error);
+  }
+}
