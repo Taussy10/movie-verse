@@ -7,6 +7,7 @@ import save from '../assets/icons/save.png';
 import star from '../assets/icons/star.png';
 import play from '../assets/icons/play.png';
 import arrow from '../assets/icons/arrow.png';
+import goBack from '../assets/icons/goBack.png';
 
 export const icons = {
   home,
@@ -17,4 +18,5 @@ export const icons = {
   star,
   play,
   arrow,
+  goBack
 };

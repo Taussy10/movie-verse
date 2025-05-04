@@ -69,7 +69,9 @@ export const fetchMovies = async ({ query }: { query: string }) => {
   }
 };
 
-export const fetchMovieDetails = async(id:number) => {
+// This function will return promsie 
+// that will resolved to according to MovieDetails types 
+export const fetchMovieDetails = async(id:string): Promise<MovieDetails> => {
 // export const fetchMovieDetails = async() => {
 // const fetchMovieDetails = async() => {
   try {
@@ -78,6 +80,11 @@ export const fetchMovieDetails = async(id:number) => {
       method: "GET",
       headers: TMDB_CONFIG.headers
     })
+if (!promise.ok) {
+  throw new Error("Failed to fetch movie details")
+  
+}
+
     const data = await promise.json()
     console.log("movieDetails from api.ts :",data);
     return data

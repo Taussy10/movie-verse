@@ -1,9 +1,10 @@
-import { FlatList, Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { ActivityIndicator, FlatList, Image, ScrollView, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import {useState, useEffect} from 'react';
 import { Link, router, useLocalSearchParams } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import useFetch from '~/hooks/useFetch';
 import { fetchMovieDetails } from '~/components/services/api';
+import { icons } from '~/constants/icons';
 
 // this route should be outside the tabs group cause 
 // we don't want to show tabs on it 
@@ -18,7 +19,7 @@ const MovieDetails = () => {
     refetch,
     // This query will take search props
     // actually id will take time to come that's why made it false then need to fetch
-  } = useFetch(() => fetchMovieDetails(id), false);
+  } = useFetch(() => fetchMovieDetails(id as string), false);
 
 useEffect(() => {
   if (id) {
@@ -26,9 +27,17 @@ useEffect(() => {
   }
 }, [id])
 
+// What about errror ? don't need qki errro home me hi handle kar liye then id pass kar diye to kaise error aayega?
 
+
+if (moviesLoading)
+  return (
+    <SafeAreaView className="bg-primary flex-1">
+      <ActivityIndicator size={"large"} color={"white"} />
+    </SafeAreaView>
+  );
   // release year , duration
-  // stars 
+  // stars fsdfsdf
   // overview,
   // release date 
   // status: released or not
@@ -39,6 +48,8 @@ useEffect(() => {
     <SafeAreaView
     className=' bg-primary flex-1'
      >
+      {/* We don't want to show statusbar in movieDetails screen */}
+     
       <FlatList 
       // cause we are getting data in {}
       data={[movies]}
@@ -81,12 +92,12 @@ useEffect(() => {
       />
 
 {/* Container for details */}
-<View className=' px-4'>
- <Text className=' text-xl font-bold text-white'>{item?.original_title}</Text>
+<View className=' px-5 mt-5 '>
+ <Text className=' text-xl font-bold text-white mb-3'>{item?.original_title}</Text>
 
 
 {/* Container for date , duration */}
-<View className=' flex-row gap-2'>
+<View className=' flex-row gap-2 mb-3 items-center'>
 <Text className=' font-semibold text-white'>{item?.release_date?.slice(0,4)}</Text>
 
 {/* Maybe it's not dot it's an image */}
@@ -95,8 +106,20 @@ useEffect(() => {
 </View>
   
 
+{/* For star and  */}
+<View   
+style={{width: 80,}}
+className=' flex-row  items-center gap-1 p-2  mr-2  mb-3 rounded-lg bg-blue-600 ' >
+
+  <Image source={icons.star}
+  className='size-7'
+  />
+        <Text className=' font-semibold text-white'>{item?.vote_average}</Text>
+      </View>
+
+
   {/* Container for  Overview  */}
-  <View className=' mb-6'>
+  <View className=' mb-3'>
   <Text className='  font-semibold text-text  mb-2 '>Overview</Text>
         <Text className=' font-semibold text-white'>{item?.overview}.</Text>
   </View>
@@ -195,10 +218,15 @@ horizontal
 </View>
 
   <TouchableOpacity
-className=' bg-darkAccent p-4 rounded-xl  flex-row items-center justify-center'
+className=' bg-darkAccent  p-4 rounded-xl  flex-row items-center justify-center 
+'
+//     absolute right-0 left-0 bottom-5  z-40 mx-5
 activeOpacity={0.8}
-onPress={() => router.push("/home")}
+onPress={() => router.back()}
 >
+  <Image source={icons.goBack}
+  className=' size-7'
+  />
   <Text className=' text-base  font-bold '>Visit Homepage</Text>
 </TouchableOpacity>
 
