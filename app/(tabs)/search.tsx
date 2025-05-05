@@ -43,13 +43,16 @@ const Search = () => {
     // We want that movie should exist 
     // if it's null will give updateSearchCount(searchQuery,movies[0]) error
 
-    // if (movies) {
-    //   updateSearchCount(searchQuery,movies[0])
-    // }
+   
    
     const timeoutId = setTimeout(async () => {
       if (searchQuery.trim()) {
         await loadMovies();
+        
+        if (movies?.length>0 && movies?.[0]) {
+          // We only want first movie 
+           await updateSearchCount(searchQuery,movies[0])
+          }
       } else {
         resetMovies();
       }

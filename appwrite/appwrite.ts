@@ -20,7 +20,11 @@ export const config = {
 
 client.setEndpoint(config.endpoint).setProject(config.projectId).setPlatform(config.platform);
 
+// Track the searces made by user
 export const updateSearchCount = async (query:string, movie: Movie) => {
+  try {
+    
+  
     // We need to check whether that movie text exist or not
     //  according to query we typed on filed
 
@@ -32,28 +36,65 @@ export const updateSearchCount = async (query:string, movie: Movie) => {
     );
     console.log("Result :",result);
     
-    // If not exist then create a new document
-    if (!result) {
-        const hello = await databases.createDocument(
-          config.databaseId,
-          config.collectionId,
-          ID.unique(),
-          {
-            "searchTerm":query,
-            // "count": 
-            "poster_url": "h",
-            "title": "hello",
-            "movie_id": movie
-          }
-        )
+ if (result.documents.length >0) {
+  // Search for existing movies
+  const existingMovie = result.documents[0]
+  
+  await databases.updateDocument(
+    config.databaseId,
+    config.collectionId,
+    existingMovie.$id,
+    {
+      count: existingMovie.count +1,
     }
-  // if not ? then create a new document and store the movie name id
-  const updateMovies = await databases.updateDocument(
+  );
+ }else{
+
+  await databases.createDocument(
     config.databaseId,
     config.collectionId,
     ID.unique(),
     {
-      SearchTerm: 'hello',
+      "searchTerm":query,
+      "count": 1,
+      "poster_url": `https://image.tmdb.org/t/p/w500${movie.poster_path}` ,
+      "title": movie.original_title,
+      "movie_id": movie.id
     }
-  );
+  )
+ }
+} catch (error) {
+    console.log("Error from updateSearchCount in appwrite.tsx :",error);
+    throw new Error("Erro while updating search count")
+}
+  
+
 };
+
+
+  // // if that searchTerm exist then increase the count
+  // const updateMovies = await databases.updateDocument(
+  //   config.databaseId,
+  //   config.collectionId,
+  //   ID.unique(),
+  //   {
+  //     count: +1,
+  //   }
+  // );
+
+
+  //   // If not exist that searchTerm then create a new document
+  //   if (!result) {
+  //     const hello = await databases.createDocument(
+  //       config.databaseId,
+  //       config.collectionId,
+  //       ID.unique(),
+  //       {
+  //         "searchTerm":query,
+  //         "count": 1,
+  //         "poster_url": movie.poster_path,
+  //         "title": movie.original_title,
+  //         "movie_id": movie.id
+  //       }
+  //     )
+  // }
